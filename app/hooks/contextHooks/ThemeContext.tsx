@@ -11,7 +11,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
-
+  // This is a test for devops : 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}
