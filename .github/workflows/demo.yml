@@ -1,0 +1,22 @@
+name: Demo Project
+on:
+    pull_request:
+        types:
+            - opened
+    workflow_dispatch:
+jobs: 
+  test:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Output event data
+          run: echo "${{ toJson(github.event)}}"  
+        - name: Checkout Code
+          uses: actions/checkout@v3
+        - name: Install NodeJS
+          uses: actions/setup-node@v3
+          with:
+            node-version: 18
+        - name: Run Test
+          #run: npm test
+          run: echo "Running Test"
+
