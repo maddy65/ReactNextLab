@@ -1,4 +1,4 @@
-name: Test Project
+name: Artifact Project
 on: workflow_dispatch
 jobs: 
   test:
@@ -32,4 +32,14 @@ jobs:
             path: dist   
         - name: Deploy
           run: echo "Building"
-
+  
+  deploye:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+        - name: Download Artifact
+          uses: actions/download-artifact@v3
+          with: 
+            name: dist-flies
+        - name: Deploy
+          run: echo "Deploying"        
