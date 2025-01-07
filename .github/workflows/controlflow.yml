@@ -1,4 +1,4 @@
-name: Artifact Project
+name: ArtiControllflow Project
 on: workflow_dispatch
 jobs: 
   test:
@@ -35,14 +35,15 @@ jobs:
             node-version: 18
         - name: Build website
           run: npm run build
-        - name: Publish js fileName
-          id: publish 
-          run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
-        - name: upload Artifact
+        - name: Test COde
+          run: npm run test
+          id: run-test  
+        - name: upload test report
+          if: steps.run-test.outcome == 'failure'
           uses: actions/upload-artifact@v3
           with:
             name: dist-flies
-            path: dist   
+            path: dist.json   
         - name: Deploy
           run: echo "Building"
   
