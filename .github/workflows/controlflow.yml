@@ -19,6 +19,7 @@ jobs:
         #  if: steps.cache.outputs.cache-hit != true 
         #  run: npm ci
         - name: Run Test
+          continue-on-error: true
           #run: npm test
           run: echo "Running Test"
   build:
@@ -54,6 +55,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - name: Output Information
-          run: |
-            echo "Something went wrong"
-            echo "${{toJson().github}}"
+          run: echo "Something went wrong"
