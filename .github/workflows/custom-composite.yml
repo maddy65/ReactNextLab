@@ -1,4 +1,4 @@
-name: ArtiControllflow Project
+name: Composite Action
 on: workflow_dispatch
 jobs: 
   test:
@@ -6,18 +6,12 @@ jobs:
     steps:
         - name: Checkout Code
           uses: actions/checkout@v3
-        - name: Cache Dependency
-          uses: actions/cache@v3
-          with: 
-            path: ~/.npm
-            key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+        - name: Load and cache dependencies
+          uses: ./.github/actions/cached-deps
         - name: Install NodeJS
           uses: actions/setup-node@v3
           with:
             node-version: 18
-        #- name: Install dependendencies
-        #  if: steps.cache.outputs.cache-hit != true 
-        #  run: npm ci
         - name: Run Test
           continue-on-error: true
           #run: npm test

@@ -1,0 +1,27 @@
+name: Matrix Demo
+on : workflow_dispatch
+jobs:
+    build:
+        continue-on-error: true
+        strategy:
+            matrix:
+                node-version: [12,14,16]
+                operating-system: [ubuntu-latest,windows-latest]
+                include: 
+                    - node-version : 18
+                      operating-system: ubuntu-latest 
+                execlude: 
+                    - node-version : 14
+                      operating-system: ubuntu-latest 
+        runs-on: ${{matrix.operating-system}}
+        steps:
+            - name: Get Code
+              uses: actions/checkout@v4
+            - name: Install Node js
+              uses: actions/setup-node@v3
+              with:
+                node-version: ${{matrix.node-version}}
+            - name: Install Dependency
+              run: npm ci
+            - name: Build Project
+              run: npm run build
