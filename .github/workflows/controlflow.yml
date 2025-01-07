@@ -39,7 +39,7 @@ jobs:
           run: npm run test
           id: run-test  
         - name: upload test report
-          if: steps.run-test.outcome == 'failure'
+          if: failure() && steps.run-test.outcome == 'failure'
           uses: actions/upload-artifact@v3
           with:
             name: dist-flies
@@ -47,16 +47,11 @@ jobs:
         - name: Deploy
           run: echo "Building"
   
-  deploye:
-    needs: test
+  reprt:
+    if: failure()
     runs-on: ubuntu-latest
     steps:
-        - name: Download Artifact
-          uses: actions/download-artifact@v3
-          with: 
-            name: dist-flies
-        - name: Output filename
-          #run: echo "${{ needs.build.outputs.script-file }}" will check later
-          run: echo "Output file name"        
-        - name: Deploy
-          run: echo "Deploying"        
+        - name: Output Information
+          run: |
+            echo "Something went wrong"
+            echo "${{github}}"
