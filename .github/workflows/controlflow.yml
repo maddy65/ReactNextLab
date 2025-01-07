@@ -16,7 +16,8 @@ jobs:
           with:
             node-version: 18
         #- name: Install dependendencies
-         # run: npm ci
+        #  if: steps.cache.outputs.cache-hit != true 
+        #  run: npm ci
         - name: Run Test
           #run: npm test
           run: echo "Running Test"
@@ -48,10 +49,11 @@ jobs:
           run: echo "Building"
   
   reprt:
+    needs: [test,build]
     if: failure()
     runs-on: ubuntu-latest
     steps:
         - name: Output Information
           run: |
             echo "Something went wrong"
-            echo "${{github}}"
+            echo "${{toJson().github}}"
