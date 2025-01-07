@@ -1,0 +1,52 @@
+name: Composite Action
+on: workflow_dispatch
+jobs: 
+  test:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout Code
+          uses: actions/checkout@v3
+        - name: Load and cache dependencies
+          uses: ./.github/actions/cached-deps
+        - name: Install NodeJS
+          uses: actions/setup-node@v3
+          with:
+            node-version: 18
+        - name: Run Test
+          continue-on-error: true
+          #run: npm test
+          run: echo "Running Test"
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    #ouput key acessable later insi de
+    outputs:
+      script-file: ${{steps.publish.outputs.script-file}}
+    steps:
+        - name: Checkout Code
+          uses: actions/checkout@v3
+        - name: Install NodeJS
+          uses: actions/setup-node@v3
+          with:
+            node-version: 18
+        - name: Build website
+          run: npm run build
+        - name: Test COde
+          run: npm run test
+          id: run-test  
+        - name: upload test report
+          if: failure() && steps.run-test.outcome == 'failure'
+          uses: actions/upload-artifact@v3
+          with:
+            name: dist-flies
+            path: dist.json   
+        - name: Deploy
+          run: echo "Building"
+  
+  reprt:
+    needs: [test,build]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+        - name: Output Information
+          run: echo "Something went wrong"
